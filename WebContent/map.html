@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+   	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+   	<meta charset="utf-8">
+   	<title>Simple markers</title>
+   	<script type="text/javascript" src="js/inputProcessor.js"></script>
+   	<script type="text/javascript" src="js/googleApi.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+  
+<body onload="start()">
+	
+		<div id="trip">
+		  	<div id="segment_0">
+			   	<label>Start point: </label>
+				<input id="startPoint_0" name="start" type="text" /><button class="mark">Mark</button>
+				<br/>
+				<label>Start date: </label>
+				<input id="startDate_0" name="startDate" type="date" />
+				<br/>		
+				<label>End point: </label>
+				<input id="endPoint_0" name="end" type="text"/><button class="mark">Mark</button>
+				<br/>
+				<label>End date: </label>
+				<input id="endDate_0" name="endDate" type="date" />
+				<br/>
+				<br/>
+			</div>
+			<button id="addSegment">+</button>
+			<br/>
+			<br/>
+			<button id='addTrip'>Save</button>
+		</div>
+	  	<div id="map" onload="initMap()">
+	  	</div>
+	
+  <script>
+  	
+  </script>
+  
+  <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPe3gMJyPWrEHrC0THGfaWXD2PC_O-aeM&libraries=places&signed_in=true&callback=initMap">
+  </script>
+</body>
+</html>

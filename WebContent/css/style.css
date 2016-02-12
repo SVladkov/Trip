@@ -1,0 +1,22 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#map {
+	height: 100%;
+	width: 50%;
+}
+
+#trip {
+	height: 95%;
+	float: right;
+	overflow-y: scroll;
+	padding-right: 3%;
+	padding-top: 3%;
+}
+
+header {
+	position: absolute	
+}
+
