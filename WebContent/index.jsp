@@ -15,13 +15,14 @@
 </head>
 <body onload="start()">
 	<div id="login">
-		<label for="username">Name: </label>
-		<input id="username" name="tb-name" type="text" />
+		<label for="email">Email: </label>
+		<input id="email" name="tb-name" type="text" />
 		<br/>
-		<label for="password">Grade: </label>
-		<input id="password" name="tb-grade" type="text"/>
+		<label for="password">Password: </label>
+		<input id="password" name="tb-grade" type="password"/>
 		<br/>
-		<button id='addUser'>Add new</button>
+		<button id='addUser'>Register</button>
+		<button id='loginButton'>Login</button>
 	</div>
 </div>
 </body>

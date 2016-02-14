@@ -14,10 +14,11 @@ public class Segment {
 	private String endName;
 	private String endCoordinates;
 	private String endDate;
+	private float distance;
 	
 	public Segment(String initialStartName, String initialStartCoordinates, String initialStartDate,
 			String initialTransport,
-			String initialEndName, String initialEndCoordinates, String initialEndDate) {
+			String initialEndName, String initialEndCoordinates, String initialEndDate, float initialDistance) {
 		this.startName = initialStartName;
 		this.startCoordinates = initialStartCoordinates;
 		this.startDate = initialStartDate;
@@ -25,6 +26,7 @@ public class Segment {
 		this.endName = initialEndName;
 		this.endCoordinates = initialEndCoordinates;
 		this.endDate = initialEndDate;
+		this.distance = initialDistance;
 	}
 	
 	/*public String GetStartName() {

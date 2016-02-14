@@ -21,7 +21,7 @@ var httpRequest;
 
 function addTrip() {
 	'use strict';
-	var resourceUrl = 'http://localhost:8080/SimpleREST/rest/hello/trip',
+	var resourceUrl = 'http://localhost:8080/SimpleREST/rest/trips/trip',
 		//startPoint = document.getElementById("startPoint").value,
 		//endPoint = document.getElementById("endPoint").value;
 	
@@ -42,7 +42,10 @@ function addTrip() {
 			endName = endElement.value,
 			
 			endDateElement = document.getElementById("endDate_" + i),
-			endDate = endDateElement.value;
+			endDate = endDateElement.value,
+			
+			distanceElement = document.getElementById("distance_" + i),
+			distance = distanceElement.innerHTML;
 		
 		var jsonElement = {
 			startCoordinates: startCoords,
@@ -51,7 +54,8 @@ function addTrip() {
 			transportation: transportation,
 			endCoordinates: endCoords,
 			endName: endName,
-			endDate: endDate
+			endDate: endDate,
+			distance: distance
 		}
 		console.log(jsonElement)
 		arrayResult.push(jsonElement);
@@ -109,6 +113,8 @@ function addSegmentFields() {
 			"<label>End date: </label>" +
 			"<input id=\"endDate_" + indexOfSegment + "\" name=\"endDate\" type=\"date\" />" +
 			"<br/>" + 
+			"Distance: <span id=\"distance_" + indexOfSegment + "\"></span>" +
+			"<br/>" +
 			"<br/>";
 	this.parentNode.insertBefore(newSegment, this);
 	
@@ -128,9 +134,30 @@ function mark() {
 	setTimeout(function(){
 		element.value = nameOfCity;
 	},500);
+	
+	currentIndex = index(element.id);
+	displayDistance(currentIndex);
 }
 
 function index(id) {
 	var res = id.split("_");
 	return res[1];
+}
+
+function displayDistance(id) {
+	var distanceElement = document.getElementById("distance_" + id),
+		startElement = document.getElementById("startPoint_" + id),
+		endElement = document.getElementById("endPoint_" + id);
+	
+	var startAsArray = startElement.name.split(','),
+		endAsArray = endElement.name.split(',');
+	
+	getDistance(startElement.name, endElement.name);
+	//drawRoute(startAsArray, endAsArray));
+	
+	if(distance != undefined) {
+		setTimeout(function(){
+			distanceElement.innerHTML = distance;
+		},500);
+	}
 }

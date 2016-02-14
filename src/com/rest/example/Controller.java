@@ -1,6 +1,8 @@
 package com.rest.example;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ import org.json.*;
 import com.mongodb.MongoClient;
 import com.rest.example.*;
 
-@Path("/hello")
+@Path("/trips")
 public class Controller {
 	
 	/*@GET
@@ -47,17 +49,66 @@ public class Controller {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String registerUser(String data){
 		JSONObject newUser = new JSONObject(data);
-		String username = newUser.getString("username");
+		String email = newUser.getString("email");
 		String password = newUser.getString("password");
 		
-		String result = username + " " + password;
+		User user = new User(email, HashPassword(password));
 		
-		System.out.println(result);
+		DatabaseMorphia db = new DatabaseMorphia();
+		db.registerUser(user);
 		
-		Database.addUser(username, password);
-		
-		return "http://localhost:8080/SimpleREST/Gogel.html";
+		return "http://localhost:8080/SimpleREST/map.html";
 		//return Response.status(201).entity(result).build();
+	}
+	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String loginUser(String data){
+		JSONObject newUser = new JSONObject(data);
+		String email = newUser.getString("email");
+		String password = newUser.getString("password");
+		
+		User user = new User(email, HashPassword(password));
+		
+		DatabaseMorphia db = new DatabaseMorphia();
+		String pass = db.getUserPass(user);
+		
+		System.out.println(pass + " " + user.getPassword());
+		
+		if(pass.equals(user.getPassword()))
+		{
+			return "http://localhost:8080/SimpleREST/map.html";
+		}
+		else
+		{
+			return "http://localhost:8080/SimpleREST/notValid.html";
+		}
+		//return Response.status(201).entity(result).build();
+	}
+	
+	private static String HashPassword(String passwordToHash) {
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(passwordToHash.getBytes()); 
+            byte[] bytes = md.digest();
+            
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            
+            generatedPassword = sb.toString();
+        } 
+        catch (NoSuchAlgorithmException e) 
+        {
+            e.printStackTrace();
+        }
+        System.out.println(generatedPassword);
+        
+        return generatedPassword;
 	}
 	
 	@POST
@@ -83,8 +134,12 @@ public class Controller {
 			String endName = segmentAsArray.getString("endName");
 			String endCoordinates = segmentAsArray.getString("endCoordinates");
 			String endDate = segmentAsArray.getString("endDate");
+			String distanceAsString = segmentAsArray.getString("distance");
 			
-			Segment segment = new Segment(startName, startCoordinate, startDate, transport, endName, endCoordinates, endDate);
+			// get rid of the "km" in "123 km"
+			float distance = Float.parseFloat(distanceAsString.split(" ")[0]);
+			
+			Segment segment = new Segment(startName, startCoordinate, startDate, transport, endName, endCoordinates, endDate, distance);
 			
 			segments.add(segment);
 		}
@@ -94,11 +149,7 @@ public class Controller {
 		
 		Trip trip = new Trip(name, isPublic, segments);
 		
-		//Document doc = new Document("name", name)
-		// 		.append("isPublic", isPublic);
-		
 		DatabaseMorphia db = new DatabaseMorphia();
-		
 		db.addTrip(trip);
 		
 		return "happy";
