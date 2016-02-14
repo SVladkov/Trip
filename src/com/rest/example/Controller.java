@@ -1,6 +1,7 @@
 package com.rest.example;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.bson.Document;
 import org.json.*;
+
+import com.mongodb.MongoClient;
 import com.rest.example.*;
 
 @Path("/hello")
@@ -59,24 +64,43 @@ public class Controller {
 	@Path("/trip")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String addTrip(String data){
+
+		//DatabaseMongo db = new DatabaseMongo();
+		//db.addTrip(data);
+
 		JSONObject masterObject = new JSONObject(data);
 		JSONArray arrayOfSegments = masterObject.getJSONArray("array");
-
+		
+		List<Segment> segments = new ArrayList<Segment>();
+		
 		for(int i=0; i<arrayOfSegments.length(); i++) { 
-			JSONObject segment = arrayOfSegments.getJSONObject(i);
+			JSONObject segmentAsArray = arrayOfSegments.getJSONObject(i);
 			
-			String startName = segment.getString("startName");
-			String startCoordinates = segment.getString("startCoordinates");
-			String endName = segment.getString("endName");
-			String endCoordinates = segment.getString("endCoordinates");
-						
-			System.out.println(startName + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			String startName = segmentAsArray.getString("startName");
+			String startCoordinate = segmentAsArray.getString("startCoordinates");
+			String startDate = segmentAsArray.getString("startDate");
+			String transport = segmentAsArray.getString("transportation");
+			String endName = segmentAsArray.getString("endName");
+			String endCoordinates = segmentAsArray.getString("endCoordinates");
+			String endDate = segmentAsArray.getString("endDate");
 			
-			DatabaseMongo db = new DatabaseMongo();
-			db.addTrip(startName, startCoordinates, endName, endCoordinates);
+			Segment segment = new Segment(startName, startCoordinate, startDate, transport, endName, endCoordinates, endDate);
+			
+			segments.add(segment);
 		}
-		//return "http://localhost:8080/SimpleREST/Gogel.html";
-		//return Response.status(201).entity(result).build();
+				
+		String name = masterObject.getString("name");
+		Boolean isPublic = masterObject.getBoolean("isPublic");
+		
+		Trip trip = new Trip(name, isPublic, segments);
+		
+		//Document doc = new Document("name", name)
+		// 		.append("isPublic", isPublic);
+		
+		DatabaseMorphia db = new DatabaseMorphia();
+		
+		db.addTrip(trip);
+		
 		return "happy";
 	}
 }

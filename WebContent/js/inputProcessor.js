@@ -27,24 +27,45 @@ function addTrip() {
 	
 	arrayResult = [];
 	for(var i=0; i<=indexOfSegment; i++) {
-		var startElement = document.getElementById("startPoint_" + i),
+		var	startElement = document.getElementById("startPoint_" + i),
 			startCoords = startElement.name,
 			startName = startElement.value,
+						
+			startDateElement = document.getElementById("startDate_" + i),
+			startDate = startDateElement.value,
+			
+			transportationElement = document.getElementById("transportation_" + i),
+			transportation = transportationElement.value,
+			
 			endElement = document.getElementById("endPoint_" + i),
 			endCoords = endElement.name,
-			endName = endElement.value;
+			endName = endElement.value,
+			
+			endDateElement = document.getElementById("endDate_" + i),
+			endDate = endDateElement.value;
 		
 		var jsonElement = {
 			startCoordinates: startCoords,
 			startName: startName,
+			startDate: startDate,
+			transportation: transportation,
 			endCoordinates: endCoords,
-			endName: endName
+			endName: endName,
+			endDate: endDate
 		}
 		console.log(jsonElement)
 		arrayResult.push(jsonElement);
 	}
 	
+	var nameElement = document.getElementById("name"),
+		name = nameElement.value,
+	
+		isPublicElement = document.getElementById("isPublic"),
+		isPublic = isPublicElement.checked;
+	
 	var result = {
+		name: name,
+		isPublic: isPublic,
 		array: arrayResult
 	}
 	
@@ -69,7 +90,18 @@ function addSegmentFields() {
 			"<br/>" +
 			"<label>Start date: </label>" +
 			"<input id=\"startDate_" + indexOfSegment + "\" name=\"startDate\" type=\"date\" />" +
-			"<br/>" +		
+			"<br/>" +
+			
+			"<label>Mean of transportation: </label>" +
+			"<select id=\"transportation_" + indexOfSegment + "\">" +
+				"<option value=\"car\">Car</option>" +
+				"<option value=\"bus\">Bus</option>" +
+				"<option value=\"ferry\">Ferry</option>" +
+				"<option value=\"plane\">Plane</option>" +
+				"<option value=\"train\">Train</option>" +
+			"</select>" +
+			
+			"<br/>" +
 			"<label>End point: </label>" +
 			"<input id=\"endPoint_" + indexOfSegment + "\" name=\"end\" type=\"text\"/>" +
 			"<button class=\"mark\">Mark</button>" +

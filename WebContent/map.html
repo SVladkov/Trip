@@ -13,11 +13,23 @@
 	
 		<div id="trip">
 		  	<div id="segment_0">
+		  		<label>Name of the trip:</label>
+		  		<input id="name" type="text" />
+		  		<br/>
 			   	<label>Start point: </label>
 				<input id="startPoint_0" name="start" type="text" /><button class="mark">Mark</button>
 				<br/>
 				<label>Start date: </label>
 				<input id="startDate_0" name="startDate" type="date" />
+				<br/>
+				<label>Mean of transportation: </label>
+				<select id="transportation_0">
+					<option value="car">Car</option>
+					<option value="bus">Bus</option>
+					<option value="ferry">Ferry</option>
+					<option value="plane">Plane</option>
+					<option value="train">Train</option>
+				</select>
 				<br/>		
 				<label>End point: </label>
 				<input id="endPoint_0" name="end" type="text"/><button class="mark">Mark</button>
@@ -28,6 +40,11 @@
 				<br/>
 			</div>
 			<button id="addSegment">+</button>
+			<br/>
+			
+			<label>Do you want the trip to be public?</label>
+			<input id="isPublic" type="checkbox">Public
+			
 			<br/>
 			<br/>
 			<button id='addTrip'>Save</button>
